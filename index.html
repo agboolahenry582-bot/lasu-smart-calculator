@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LASU Smart Calculator - CGPA & Fees</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#f0f2ff;background:radial-gradient(circle at top,#6d28d9 0%,#1e1b4b 70%);min-height:100vh;padding:15px;color:#fff}
+.glass{background:rgba(255,255,255,0.1);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:20px;margin-bottom:15px}
+h1{font-size:22px;text-align:center;margin-bottom:5px} .sub{text-align:center;opacity:.7;font-size:13px;margin-bottom:15px}
+.tab{display:flex;gap:10px;margin-bottom:15px} .tab button{flex:1;padding:12px;border:none;border-radius:12px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.15);color:#fff}
+.tab button.active{background:#fff;color:#4f46e5}
+.input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.2);color:#fff;margin:8px 0;outline:none}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;background:#fff;color:#4f46e5;font-weight:800;cursor:pointer;margin-top:10px}
+.result{margin-top:12px;padding:12px;border-radius:10px;background:rgba(255,255,255,.15);text-align:center;font-weight:700;display:none}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;background:#22c55e;color:#000;font-size:11px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="glass" style="text-align:center">
+<h1>LASU Smart Calc</h1>
+<p class="sub">Built for LASU Ojo Freshers — CGPA & Fees in seconds</p>
+</div>
+
+<div class="tab">
+<button id="t1" class="active" onclick="showTab(1)">CGPA</button>
+<button id="t2" onclick="showTab(2)">School Fees</button>
+</div>
+
+<!-- CGPA TAB -->
+<div id="tab1" class="glass">
+<h3>🎓 CGPA Target Calculator</h3>
+<input id="currCgpa" class="input" type="number" step="0.01" placeholder="Current CGPA e.g 3.2">
+<input id="currUnits" class="input" type="number" placeholder="Total Units Done e.g 60">
+<input id="nextUnits" class="input" type="number" placeholder="Units Next Semester e.g 24">
+<input id="targetCgpa" class="input" type="number" step="0.01" placeholder="Target CGPA e.g 4.0">
+<button class="btn" onclick="calcCgpa()">Calculate What You Need</button>
+<div id="cgpaRes" class="result"></div>
+</div>
+
+<!-- FEES TAB -->
+<div id="tab2" class="glass" style="display:none">
+<h3>💰 School Fees Estimator 2025/26</h3>
+<select id="indigene" class="input"><option value="ind">Lagos Indigene</option><option value="non">Non-Indigene</option></select>
+<select id="level" class="input"><option value="100">100 Level (Fresher)</option><option value="200">200 Level</option><option value="300">300 Level</option><option value="400">400 Level</option></select>
+<button class="btn" onclick="calcFees()">Check Fees</button>
+<div id="feesRes" class="result"></div>
+<p style="font-size:11px;opacity:.6;margin-top:8px;text-align:center">*Estimate only. Confirm on LASU portal.</p>
+</div>
+
+<div class="glass" style="text-align:center;font-size:12px;opacity:.7">
+Built by Henry • LASU Computer Science • Works Offline
+</div>
+
+<script>
+function showTab(n){
+ document.getElementById('tab1').style.display=n==1?'block':'none';
+ document.getElementById('tab2').style.display=n==2?'block':'none';
+ document.getElementById('t1').classList.toggle('active',n==1);
+ document.getElementById('t2').classList.toggle('active',n==2);
+}
+function calcCgpa(){
+ let c=parseFloat(currCgpa.value), u=parseFloat(currUnits.value), nu=parseFloat(nextUnits.value), t=parseFloat(targetCgpa.value);
+ if(!c||!u||!nu||!t){cgpaRes.style.display='block';cgpaRes.innerHTML='Fill all fields 🙏';return;}
+ let totalNeeded = t*(u+nu) - c*u; let need = totalNeeded/nu;
+ cgpaRes.style.display='block';
+ if(need>5) cgpaRes.innerHTML=`Omo! You need <b>${need.toFixed(2)}</b> GPA next sem — e hard but God dey! 🔥`;
+ else if(need<0) cgpaRes.innerHTML=`You don already pass target! You fit get as low as <b>${need.toFixed(2)}</b> and still make am.`;
+ else cgpaRes.innerHTML=`You need <b>${need.toFixed(2)} GPA</b> next semester in ${nu} units<br><span class="badge">Target: ${t} CGPA ✅</span>`;
+}
+function calcFees(){
+ let ind=indigene.value, lvl=level.value;
+ let fee = (ind=='ind')? (lvl=='100'?57500:40500) : (lvl=='100'?115750:88500);
+ feesRes.style.display='block';
+ feesRes.innerHTML=`Estimated Fees: <b>₦${fee.toLocaleString()}</b><br><span class="badge">${ind=='ind'?'Lagos Indigene':'Non-Indigene'} - ${lvl}L</span>`;
+}
+</script>
+</body>
+</html>
