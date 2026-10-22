@@ -2,7 +2,6 @@ streamlit
 groq
 PyMuPDF
 python-docx
-googlesearch-python
 pandas
 openpyxl
 Pillow
